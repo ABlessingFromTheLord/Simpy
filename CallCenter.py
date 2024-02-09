@@ -1,5 +1,4 @@
 import random as rnd
-import simpy as sp
 import numpy as np
 
 # parameters or variables to vary
@@ -11,7 +10,7 @@ SIM_TIME = 120
 # accessible variables
 customers_handled = 0
 
-env = sp.Environment()
+env = simpy.Environment()
 
 class CallCenter:
 
