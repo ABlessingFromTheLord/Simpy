@@ -133,7 +133,7 @@ def run_evolution(
 
         for j in range(int(len(population) / 2) - 1):
             parents = selection_func(population, fitness_func)  # select parents
-            offspring_a, offspring_b = crossover_func(parents[0], parents[1])  # get two chilren form the parents
+            offspring_a, offspring_b = crossover_func(parents[0], parents[1])  # get two children form the parents
             offspring_a = mutation_func(offspring_a)  # expand variety
             offspring_b = mutation_func(offspring_b)  # expand variety
             next_generation += [offspring_a, offspring_b]
@@ -156,12 +156,12 @@ population, generations = run_evolution(
     # for more_things test with a fitness of 1310
 
     populate_func=partial(
-        generate_population, size=10, genome_length=len(things)
+        generate_population, size=10, genome_length=len(more_things)
     ),
     fitness_func=partial(
-        fitness, things=things, weight_limit=3000
+        fitness, things=more_things, weight_limit=3000
     ),
-    fitness_limit=740,
+    fitness_limit=1310,
     generation_limit=100
 )
 end = time.time()
@@ -171,7 +171,7 @@ end = time.time()
 def genome_to_things(genome: Genome, things: [Thing]) -> [Thing]:
     result = []
 
-    for i, thing in enumerate(things):
+    for i, thing in enumerate(more_things):
         if genome[i] == 1:
             result += [thing.name]
 
@@ -180,6 +180,6 @@ def genome_to_things(genome: Genome, things: [Thing]) -> [Thing]:
 
 print(f"number of generations: {generations}")
 print(f"time: {end - start}s")
-print(f"best solution: {genome_to_things(population[0], things)}")
+print(f"best solution: {genome_to_things(population[0], more_things)}")
 
 print(genome_to_string(population[0]))
