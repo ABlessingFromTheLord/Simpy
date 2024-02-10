@@ -152,7 +152,12 @@ def run_evolution(
 #  instantiating the solution to run
 start = time.time()
 population, generations = run_evolution(
-    # for things test with a fitness of 740
+    # for things test with a fitness of 740 and the best solution is
+    # 'Laptop', 'Headphones', 'Coffee Mug', 'Water Bottle'
+    # for more_things test with a fitness of 1310 and best solution is
+    # 'Laptop', 'Headphones', 'Coffee Mug', 'Phone', 'Baseball Cap' or
+    # 'Laptop', 'Headphones', 'Water Bottle', 'Mints', 'Socks', 'Tissues', 'Phone', 'Baseball Cap'
+
     # for more_things test with a fitness of 1310
 
     populate_func=partial(

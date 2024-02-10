@@ -9,6 +9,7 @@ from pymoo.termination import get_termination
 from pymoo.optimize import minimize
 from pymoo.operators.sampling.rnd import BinaryRandomSampling
 from pymoo.config import Config
+
 Config.warnings['not_compiled'] = False
 import numpy as np
 
@@ -79,44 +80,44 @@ things_2 = [
 ]
 
 
-problem = MyKnapsackProblem(things_2, 3000, 1310, len(things_2))
-sampling = BinaryRandomSampling()
-crossover = TwoPointCrossover()
-mutation = BitflipMutation()
+class AlgorithmRunner:
+    def __init__(self, things, fitness, capacity):
+        self.things = things
+        self.fitness = fitness
+        self.capacity = capacity
 
-algorithm = GA(
-    pop_size=100,
-    sampling=sampling,
-    crossover=crossover,
-    mutation=mutation,
-    eliminate_duplicates=True
-)
+    def run_algorithm(self):
+        problem = MyKnapsackProblem(self.things, self.capacity, self.fitness, len(self.things))
+        sampling = BinaryRandomSampling()
+        crossover = TwoPointCrossover()
+        mutation = BitflipMutation()
 
-algorithm2 = NSGA2(pop_size=100,
-                   sampling=sampling,
-                   crossover=crossover,
-                   mutation=mutation,
-                   eliminate_duplicates=True
-                   )
+        algorithm = NSGA2(pop_size=100,
+                          sampling=sampling,
+                          crossover=crossover,
+                          mutation=mutation,
+                          eliminate_duplicates=True
+                          )
 
-termination = get_termination("n_gen", 100)
+        termination = get_termination("n_gen", 100)
 
-start = time.time()
+        start = time.time()
 
-res = minimize(problem,
-               algorithm2,
-               termination,
-               verbose=False)
+        res = minimize(problem,
+                       algorithm,
+                       termination,
+                       verbose=False)
 
-duration = time.time() - start
+        duration = time.time() - start
+        return res.X
 
 
 def genome_to_things(gene, things):
     result = []
     results = []
 
-    if len(gene) < 2:
-        for i, thing in enumerate(things):
+    if not isinstance(gene[0], np.ndarray):
+        for i in range(len(things)):
             if gene[i] == 1:
                 result.append(things[i][0])
         return result
@@ -124,7 +125,7 @@ def genome_to_things(gene, things):
         k = len(gene) - 1
         while k >= 0:
             temp = []
-            for i, thing in enumerate(things):
+            for i in range(len(things)):
                 if gene[k][i] == 1:
                     temp.append(things[i][0])
             results.append(temp)
@@ -132,6 +133,13 @@ def genome_to_things(gene, things):
         return results
 
 
+algo_1 = AlgorithmRunner(things_1, 740, 3000)
+algo_2 = AlgorithmRunner(things_2, 1310, 3000)
+
+gene_1 = algo_1.run_algorithm()
+gene_2 = algo_2.run_algorithm()
+
 print("Best solution found:")
-print(f"best solution: {genome_to_things(res.X, things_2)}")
-print(f"Time taken: {duration}")
+print(f"best solution: {genome_to_things(gene_1, things_1)}")
+print(f"best solution: {genome_to_things(gene_2, things_2)}")
+#print(f"Time taken: {duration}")

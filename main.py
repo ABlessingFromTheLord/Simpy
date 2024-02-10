@@ -24,7 +24,7 @@ for x in range(0, 100):
         trues += 1
 
 
-mu, sigma = 60, 30 # mean and standard deviation
+mu, sigma = 60, 30  # mean and standard deviation
 type(numpy.uint32(0).item())  # <class 'int'>
 type(numpy.int16(0).item())   # <class 'int'>
 
