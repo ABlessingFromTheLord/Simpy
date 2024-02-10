@@ -1,4 +1,3 @@
-things = ['apple', 'banana', 'cherry']
+import math
 
-for i in enumerate(things):
-    print(i)
+print(math.floor(4.8))
