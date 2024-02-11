@@ -46,7 +46,14 @@ def get_true_order_balance():
         ORDER_Y = TEMP_ORDER_Y
 
 
-set_test_values(60, 10, 0, 0)
+def adjust(genes):
+    for i in range(len(genes)):
+        if 0 < genes[i] < 1:
+            genes[i] = 1
+    return genes
+
+
+set_test_values(0.1, 1, 0, 0)
 get_true_order_balance()
 
 
@@ -55,8 +62,15 @@ class JobShopScheduling(Problem):
         super().__init__(n_var=2, n_obj=1, n_constr=0, xl=np.array([0, 0]), xu=np.array([ORDER_X, ORDER_Y]))
 
     def _evaluate(self, x, out, *args, **kwargs):
-        total_x = np.zeros(len(x))
-        total_y = np.zeros(len(x))
+        if MACHINE_A_CAPACITY > ORDER_X:
+            total_x = np.ones(len(x))
+        else:
+            total_x = np.zeros(len(x))
+
+        if MACHINE_B_CAPACITY > ORDER_Y:
+            total_y = np.ones(len(x))
+        else:
+            total_y = np.zeros(len(x))
 
         for i in range(len(x)):
             if x[i, 0] > 0:
@@ -84,6 +98,10 @@ res = minimize(problem,
                seed=1,
                verbose=True)
 
+res.X = adjust(res.X)
+
 print("Best solution found: %s" % res.X)
+
+
 print(round(res.X[0]))
 print(round(res.X[1]))
