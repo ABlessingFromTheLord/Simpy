@@ -46,7 +46,7 @@ def get_true_order_balance():
         ORDER_Y = TEMP_ORDER_Y
 
 
-set_test_values(60, 60, 10, 90)
+set_test_values(60, 10, 0, 0)
 get_true_order_balance()
 
 
@@ -60,10 +60,10 @@ class JobShopScheduling(Problem):
 
         for i in range(len(x)):
             if x[i, 0] > 0:
-
                 total_x[i] = MACHINE_A_CAPACITY * x[i, 0]
             if x[i, 1] > 0:
                 total_y[i] = MACHINE_B_CAPACITY * x[i, 1]
+
         fitness = np.abs(total_x - TEMP_ORDER_X) + np.abs(total_y - TEMP_ORDER_Y)
         out["F"] = fitness[:, None]  # Reshape to match the expected shape
         out["G"] = np.zeros((len(x), 0))  # No constraints for now
@@ -80,7 +80,7 @@ algorithm = NSGA2(
 
 res = minimize(problem,
                algorithm,
-               ('n_gen', 1000),
+               ('n_gen', 100),
                seed=1,
                verbose=True)
 
