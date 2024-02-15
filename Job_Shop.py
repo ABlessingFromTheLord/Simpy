@@ -96,7 +96,7 @@ res = minimize(problem,
                algorithm,
                ('n_gen', 100),
                seed=1,
-               verbose=True)
+               verbose=False)
 
 res.X = adjust(res.X)
 
