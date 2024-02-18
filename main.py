@@ -1,33 +1,25 @@
-import numpy
-import math
+parallel_jobs = []
+temp = []
+n = len(jobs)
 
-def with_probability(probability):
-    """
-    Returns True with the given probability.
+job_index_1 = 0
+while job_index_1 < n:
+    job_1 = jobs[job_index_1]
+    machine = job_1.get_machine_required()
+    if job_1 not in temp:
+        temp.append(job_1)
+        jobs.remove(job_1)
+        n -= 1
 
-    Parameters:
-    - probability (float): A value between 0 and 1 representing the probability of returning True.
-
-    Returns:
-    - bool: True with the specified probability, False otherwise.
-    """
-    return numpy.around(numpy.random.uniform(0, 1), 2) < (1 - probability)
-
-
-# Example usage:
-probability_value = 1  # You can adjust this value as needed
-trues = 0
-
-for x in range(0, 100):
-    result = with_probability(probability_value)
-    if result:
-        trues += 1
-
-
-mu, sigma = 60, 30  # mean and standard deviation
-type(numpy.uint32(0).item())  # <class 'int'>
-type(numpy.int16(0).item())   # <class 'int'>
-
-s = numpy.floor(numpy.random.normal(60, 30, 1).item()).astype(int).item()
-print(type(s))
-print("random repair time is ", s)
+        job_2_index = 0
+        while job_2_index < n:
+            if jobs[job_2_index].get_machine_required() == machine:
+                temp.append(jobs[job_2_index])
+                jobs.remove(jobs[job_2_index])
+                n -= 1
+            else:
+                job_2_index += 1
+        parallel_jobs.append(temp.copy())
+        temp.clear()
+    else:
+        job_index_1 += 1
